@@ -280,7 +280,7 @@ function initSigPad() {
   const ctx = cv.getContext('2d');
   ctx.clearRect(0, 0, cv.width, cv.height);
   const light = document.documentElement.dataset.theme === 'light';
-  ctx.strokeStyle = light ? '#065f46' : '#fbbf24';
+  ctx.strokeStyle = light ? '#7c2d12' : '#f2a93b';
   ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   let drawing = false, last = null;
   const pos = (e) => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height }; };
@@ -350,20 +350,20 @@ $('#btnWheelAdd').onclick = async () => {
 function drawWheel(highlight = -1) {
   const cv = $('#wheel'), ctx = cv.getContext('2d'), n = Math.max(wheelNames.length, 1);
   const light = document.documentElement.dataset.theme === 'light';
-  const sliceA = light ? '#dcf7ec' : '#0a241c', sliceB = light ? '#bfe9d8' : '#123327';
-  const ink = light ? '#0b3d2e' : '#e9f7f0';
+  const sliceA = light ? '#f7e8d2' : '#2b140b', sliceB = light ? '#f0d5ae' : '#3d1e10';
+  const ink = light ? '#5b2c12' : '#f7ecdc';
   ctx.clearRect(0, 0, 340, 340);
   for (let i = 0; i < n; i++) {
     ctx.beginPath(); ctx.moveTo(170, 170);
     ctx.arc(170, 170, 160, (i / n) * Math.PI * 2, ((i + 1) / n) * Math.PI * 2);
-    ctx.fillStyle = i === highlight ? '#34e0aa' : (i % 2 ? sliceA : sliceB);
-    ctx.fill(); ctx.strokeStyle = 'rgba(52,224,170,.4)'; ctx.stroke();
+    ctx.fillStyle = i === highlight ? '#f2a93b' : (i % 2 ? sliceA : sliceB);
+    ctx.fill(); ctx.strokeStyle = 'rgba(242,169,59,.4)'; ctx.stroke();
     ctx.save(); ctx.translate(170, 170); ctx.rotate((i + .5) / n * Math.PI * 2);
     ctx.fillStyle = ink; ctx.font = '11px Inter'; ctx.textAlign = 'right';
     ctx.fillText((wheelNames[i] || '—').slice(0, 16), 150, 4); ctx.restore();
   }
-  ctx.beginPath(); ctx.arc(170, 170, 26, 0, 7); ctx.fillStyle = '#34e0aa'; ctx.fill();
-  ctx.fillStyle = '#04121a'; ctx.font = 'bold 12px Orbitron'; ctx.textAlign = 'center'; ctx.fillText('SPIN', 170, 174);
+  ctx.beginPath(); ctx.arc(170, 170, 26, 0, 7); ctx.fillStyle = '#f2a93b'; ctx.fill();
+  ctx.fillStyle = '#2b1408'; ctx.font = 'bold 12px Orbitron'; ctx.textAlign = 'center'; ctx.fillText('SPIN', 170, 174);
 }
 async function loadRoulette() {
   ELIGIBLE = await api('/api/roulette/eligible');
