@@ -366,12 +366,33 @@ $('#btnCsv').onclick = async () => {
 $('#btnPrint').onclick = () => window.print();
 
 // ---------- users ----------
+const ROLE_STYLE = {
+  admin: { icon: '◈', cls: 'role-admin', desc: 'Full access' },
+  coordinator: { icon: '✦', cls: 'role-coordinator', desc: 'Registration & rooms' },
+  president: { icon: '★', cls: 'role-president', desc: 'Church oversight' },
+  viewer: { icon: '◎', cls: 'role-viewer', desc: 'Read only' }
+};
+const escHtml = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+let USERS = [];
 async function loadUsers() {
-  const users = await api('/api/users');
-  $('#userRows').innerHTML = users.map(u => `<tr><td>${u.name}</td><td>@${u.username}</td>
-    <td><span class="badge">${u.role}</span></td><td>${u.church || '—'}</td>
-    <td><button class="btn sm" onclick="editUser('${u.id}','${u.name}','${u.role}','${u.church || ''}')">Edit</button>
-    <button class="btn sm danger" onclick="delUser('${u.id}')">Del</button></td></tr>`).join('');
+  USERS = await api('/api/users');
+  const counts = {};
+  USERS.forEach(u => counts[u.role] = (counts[u.role] || 0) + 1);
+  $('#roleStrip').innerHTML = Object.keys(ROLE_STYLE).map(r =>
+    `<div class="role-chip ${ROLE_STYLE[r].cls}"><span class="dot"></span>${ROLE_STYLE[r].icon} ${r} <b>${counts[r] || 0}</b></div>`).join('');
+  $('#userGrid').innerHTML = USERS.map(u => {
+    const rs = ROLE_STYLE[u.role] || ROLE_STYLE.viewer;
+    const initials = u.name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const isMe = ME && u.id === ME.id;
+    return `<div class="card glass user-card ${rs.cls}">
+      <div class="user-top"><div class="avatar">${escHtml(initials)}</div>
+        <div><b>${escHtml(u.name)}</b><small class="muted">@${escHtml(u.username)}${isMe ? ' · you' : ''}</small></div>
+        <span class="role-badge">${rs.icon} ${escHtml(u.role)}</span></div>
+      <div class="user-meta"><span>⛪ ${escHtml(u.church || '—')}</span><small class="muted">${rs.desc}</small></div>
+      <div class="row"><button class="btn sm" onclick="editUser('${u.id}')">Edit</button>
+      <button class="btn sm danger" onclick="delUser('${u.id}')">Delete</button></div>
+    </div>`;
+  }).join('') || '<p class="muted">No users.</p>';
 }
 $('#btnAddUser').onclick = () => openModal('Add user / role', `
   ${field('u_nm', 'Full name')}<div class="row">${field('u_un', 'Username')}${field('u_pw', 'Password', '', 'password')}</div>
@@ -381,16 +402,19 @@ $('#btnAddUser').onclick = () => openModal('Add user / role', `
     await api('/api/users', { method: 'POST', body: JSON.stringify({ name: $('#u_nm').value, username: $('#u_un').value, password: $('#u_pw').value, role: $('#u_role').value, church: $('#u_ch').value }) });
     $('#modal').classList.add('hidden'); loadUsers();
   });
-window.editUser = (id, name, role, church) => openModal('Edit user', `
-  ${field('u_nm', 'Full name', name)}${field('u_pw', 'New password (blank = keep)', '', 'password')}
-  <div class="row"><label>Role<select id="u_role"><option ${role === 'admin' ? 'selected' : ''}>admin</option><option ${role === 'coordinator' ? 'selected' : ''}>coordinator</option><option ${role === 'president' ? 'selected' : ''}>president</option><option ${role === 'viewer' ? 'selected' : ''}>viewer</option></select></label>
-  ${field('u_ch', 'Church', church)}</div>`,
+window.editUser = (id) => {
+  const u = USERS.find(x => x.id === id); if (!u) return;
+  openModal('Edit user', `
+  ${field('u_nm', 'Full name', u.name)}${field('u_pw', 'New password (blank = keep)', '', 'password')}
+  <div class="row"><label>Role<select id="u_role"><option ${u.role === 'admin' ? 'selected' : ''}>admin</option><option ${u.role === 'coordinator' ? 'selected' : ''}>coordinator</option><option ${u.role === 'president' ? 'selected' : ''}>president</option><option ${u.role === 'viewer' ? 'selected' : ''}>viewer</option></select></label>
+  ${field('u_ch', 'Church', u.church || '')}</div>`,
   async () => {
     const body = { name: $('#u_nm').value, role: $('#u_role').value, church: $('#u_ch').value };
     if ($('#u_pw').value) body.password = $('#u_pw').value;
     await api('/api/users/' + id, { method: 'PUT', body: JSON.stringify(body) });
     $('#modal').classList.add('hidden'); loadUsers();
   });
+};
 window.delUser = async (id) => { if (confirm('Delete user?')) { await api('/api/users/' + id, { method: 'DELETE' }); loadUsers(); } };
 
 // enter-to-login + auto boot
