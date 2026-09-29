@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1f17">
 <title>CampReg — Registration & Room Assignation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet">
@@ -14,7 +15,17 @@
 <!-- LOGIN -->
 <section id="loginView" class="login-wrap">
   <div class="login-card glass">
-    <div class="brand"><span class="logo">◈</span><div><h1>CampReg</h1><p>Registration & Room Assignation</p></div></div>
+    <div class="login-side">
+      <span class="logo xl">◈</span>
+      <h1>CampReg</h1>
+      <p>Registration & Room Assignation System</p>
+      <ul>
+        <li>🧍 Camper registration</li>
+        <li>🛏️ Room designation + pirma</li>
+        <li>🎡 Roulette & reports</li>
+      </ul>
+    </div>
+    <div class="login-form">
     <h2>Sign in</h2>
     <p class="muted">Use your assigned account. Works on laptop & phone.</p>
     <label>Username<input id="liUser" autocomplete="username" placeholder="admin"></label>
@@ -25,6 +36,7 @@
       <b>Demo accounts</b>
       <code>admin / admin123</code><code>coordinator / coord123</code>
       <code>president / pres123</code><code>viewer / view123</code>
+    </div>
     </div>
   </div>
 </section>

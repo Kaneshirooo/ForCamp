@@ -108,10 +108,10 @@ async function resolveRoomImage() {
 async function loadDashboard() {
   const s = await api('/api/reports/summary');
   $('#statCards').innerHTML = [
-    ['🧍 Campers', s.campers], ['🏠 Rooms', s.rooms], ['🛏️ Designations', s.designations],
-    ['✅ Clean registered*', s.clean_registered], ['🏆 Winners', s.winners], ['🤝 Reps', s.representatives]
-  ].map(([k, v]) => `<div class="card glass"><span class="muted">${k}</span><b>${v}</b></div>`).join('')
-    + `<div class="card glass"><span class="muted">Campers by gender</span><b style="font-size:14px">Boy ${s.byGender.boy} · Girl ${s.byGender.girl}</b></div>`;
+    ['🧍', 'Campers', s.campers], ['🏠', 'Rooms', s.rooms], ['🛏️', 'Designations', s.designations],
+    ['✅', 'Registered', s.clean_registered], ['🏆', 'Winners', s.winners], ['🤝', 'Reps', s.representatives]
+  ].map(([ic, k, v]) => `<div class="card glass stat"><div class="stat-ic">${ic}</div><div><span class="muted">${k}</span><b>${v}</b></div></div>`).join('')
+    + `<div class="card glass stat"><div class="stat-ic">⚥</div><div><span class="muted">By gender</span><b style="font-size:14px">Boy ${s.byGender.boy} · Girl ${s.byGender.girl}</b></div></div>`;
   const maxChurch = Math.max(1, ...Object.values(s.byChurch));
   const maxStatus = Math.max(1, ...Object.values(s.byStatus));
   $('#byChurch').innerHTML = Object.entries(s.byChurch).map(([k, v]) => `<div class="dash-bar"><div class="row" style="justify-content:space-between"><span>${k}</span><b>${v}</b></div><div class="progress"><i style="width:${Math.round(v / maxChurch * 100)}%"></i></div></div>`).join('') || '<span class="muted">No data</span>';
@@ -280,7 +280,7 @@ function initSigPad() {
   const ctx = cv.getContext('2d');
   ctx.clearRect(0, 0, cv.width, cv.height);
   const light = document.documentElement.dataset.theme === 'light';
-  ctx.strokeStyle = light ? '#4c1d95' : '#fbbf24';
+  ctx.strokeStyle = light ? '#065f46' : '#fbbf24';
   ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   let drawing = false, last = null;
   const pos = (e) => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height }; };
@@ -350,19 +350,19 @@ $('#btnWheelAdd').onclick = async () => {
 function drawWheel(highlight = -1) {
   const cv = $('#wheel'), ctx = cv.getContext('2d'), n = Math.max(wheelNames.length, 1);
   const light = document.documentElement.dataset.theme === 'light';
-  const sliceA = light ? '#e7defc' : '#1c1440', sliceB = light ? '#d3c2f7' : '#2a2058';
-  const ink = light ? '#3b2a6d' : '#eaf2ff';
+  const sliceA = light ? '#dcf7ec' : '#0a241c', sliceB = light ? '#bfe9d8' : '#123327';
+  const ink = light ? '#0b3d2e' : '#e9f7f0';
   ctx.clearRect(0, 0, 340, 340);
   for (let i = 0; i < n; i++) {
     ctx.beginPath(); ctx.moveTo(170, 170);
     ctx.arc(170, 170, 160, (i / n) * Math.PI * 2, ((i + 1) / n) * Math.PI * 2);
-    ctx.fillStyle = i === highlight ? '#a78bfa' : (i % 2 ? sliceA : sliceB);
-    ctx.fill(); ctx.strokeStyle = 'rgba(167,139,250,.4)'; ctx.stroke();
+    ctx.fillStyle = i === highlight ? '#34e0aa' : (i % 2 ? sliceA : sliceB);
+    ctx.fill(); ctx.strokeStyle = 'rgba(52,224,170,.4)'; ctx.stroke();
     ctx.save(); ctx.translate(170, 170); ctx.rotate((i + .5) / n * Math.PI * 2);
     ctx.fillStyle = ink; ctx.font = '11px Inter'; ctx.textAlign = 'right';
     ctx.fillText((wheelNames[i] || '—').slice(0, 16), 150, 4); ctx.restore();
   }
-  ctx.beginPath(); ctx.arc(170, 170, 26, 0, 7); ctx.fillStyle = '#a78bfa'; ctx.fill();
+  ctx.beginPath(); ctx.arc(170, 170, 26, 0, 7); ctx.fillStyle = '#34e0aa'; ctx.fill();
   ctx.fillStyle = '#04121a'; ctx.font = 'bold 12px Orbitron'; ctx.textAlign = 'center'; ctx.fillText('SPIN', 170, 174);
 }
 async function loadRoulette() {
