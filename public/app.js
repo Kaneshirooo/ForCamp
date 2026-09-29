@@ -320,13 +320,13 @@ function drawWheel(highlight = -1) {
   for (let i = 0; i < n; i++) {
     ctx.beginPath(); ctx.moveTo(170, 170);
     ctx.arc(170, 170, 160, (i / n) * Math.PI * 2, ((i + 1) / n) * Math.PI * 2);
-    ctx.fillStyle = i === highlight ? '#00e5ff' : (i % 2 ? '#16224a' : '#1f2f66');
-    ctx.fill(); ctx.strokeStyle = 'rgba(0,229,255,.4)'; ctx.stroke();
+    ctx.fillStyle = i === highlight ? '#a78bfa' : (i % 2 ? '#1c1440' : '#2a2058');
+    ctx.fill(); ctx.strokeStyle = 'rgba(167,139,250,.4)'; ctx.stroke();
     ctx.save(); ctx.translate(170, 170); ctx.rotate((i + .5) / n * Math.PI * 2);
     ctx.fillStyle = '#eaf2ff'; ctx.font = '11px Inter'; ctx.textAlign = 'right';
     ctx.fillText((wheelNames[i] || '—').slice(0, 16), 150, 4); ctx.restore();
   }
-  ctx.beginPath(); ctx.arc(170, 170, 26, 0, 7); ctx.fillStyle = '#00e5ff'; ctx.fill();
+  ctx.beginPath(); ctx.arc(170, 170, 26, 0, 7); ctx.fillStyle = '#a78bfa'; ctx.fill();
   ctx.fillStyle = '#04121a'; ctx.font = 'bold 12px Orbitron'; ctx.textAlign = 'center'; ctx.fillText('SPIN', 170, 174);
 }
 async function loadRoulette() {
