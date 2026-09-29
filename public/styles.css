@@ -151,6 +151,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box
 .stat>div:last-child{display:grid}
 .stat-ic{width:46px;height:46px;flex:none;border-radius:14px;display:grid;place-items:center;font-size:21px;background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 6px 18px rgba(0,0,0,.3)}
 .brand b,.brand h1{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-img{width:38px;height:38px;object-fit:contain;background:#fff;border-radius:11px;padding:3px;flex:none;box-shadow:0 0 14px rgba(242,169,59,.45)}
+.login-side .logo-img{width:112px;height:112px;border-radius:26px;padding:10px;margin-bottom:8px;box-shadow:0 10px 26px rgba(0,0,0,.25)}
 ::selection{background:var(--acc);color:#2b1408}
 .cards b{font-family:Orbitron;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .dash-bar{margin:9px 0}

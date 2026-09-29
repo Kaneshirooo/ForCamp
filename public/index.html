@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#221009">
-<title>CampReg — Registration & Room Assignation</title>
+<title>AYD CampReg — Registration & Room Assignation</title>
+<link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -16,8 +17,8 @@
 <section id="loginView" class="login-wrap">
   <div class="login-card glass">
     <div class="login-side">
-      <span class="logo xl">◈</span>
-      <h1>CampReg</h1>
+      <img class="logo-img" src="logo.png" alt="AYD logo" onerror="this.outerHTML='<span class=logo>◈</span>'">
+      <h1>AYD CampReg</h1>
       <p>Registration & Room Assignation System</p>
       <ul>
         <li>🧍 Camper registration</li>
@@ -44,7 +45,7 @@
 <!-- APP -->
 <div id="appView" class="hidden">
   <aside class="sidebar glass">
-    <div class="brand sm"><span class="logo">◈</span><div><b>CampReg</b><small id="roleBadge">—</small></div></div>
+    <div class="brand sm"><img class="logo-img" src="logo.png" alt="AYD" onerror="this.outerHTML='<span class=logo>◈</span>'"><div><b>AYD CampReg</b><small id="roleBadge">—</small></div></div>
     <nav id="nav">
       <button data-page="dashboard" class="active">▦ Dashboard</button>
       <button data-page="campers">🧍 Campers</button>
