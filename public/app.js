@@ -223,8 +223,8 @@ async function loadDesignations() {
         <span class="badge b-${d.status}">${d.status}</span></div>
       <small class="muted">→ ${d.room ? (d.room.building + ' · ' + d.room.room_name) : 'no room'} · ${d.camper?.church || ''}</small>
       <div class="row">
-        <div style="flex:1">${d.arrival_photo ? `<img src="${d.arrival_photo}">` : '<small class="muted">No arrival photo</small>'}<small class="muted">Arrival (pagkarating)</small></div>
-        <div style="flex:1">${d.departure_photo ? `<img src="${d.departure_photo}">` : '<small class="muted">No departure photo</small>'}<small class="muted">Departure (pagkaalis)</small></div>
+        <div style="flex:1;display:grid;gap:4px">${d.arrival_photo ? `<img src="${d.arrival_photo}">` : '<small class="muted">No arrival photo</small>'}<small class="muted">Arrival</small></div>
+        <div style="flex:1;display:grid;gap:4px">${d.departure_photo ? `<img src="${d.departure_photo}">` : '<small class="muted">No departure photo</small>'}<small class="muted">Departure</small></div>
       </div>
       <small class="muted">${d.notes || ''} ${d.approved_by ? '· by ' + d.approved_by : ''}</small>
       <div class="row">
