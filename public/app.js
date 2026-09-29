@@ -27,8 +27,9 @@ $('#btnTheme').onclick = () => {
   const h = document.documentElement;
   h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark';
   localStorage.setItem('camp_theme', h.dataset.theme);
+  if (!$('#page-roulette').classList.contains('hidden')) drawWheel();
 };
-document.documentElement.dataset.theme = localStorage.getItem('camp_theme') || 'dark';
+document.documentElement.dataset.theme = localStorage.getItem('camp_theme') || 'light';
 
 // ---------- nav ----------
 function go(page) {
@@ -316,14 +317,17 @@ $('#btnWheelAdd').onclick = async () => {
 };
 function drawWheel(highlight = -1) {
   const cv = $('#wheel'), ctx = cv.getContext('2d'), n = Math.max(wheelNames.length, 1);
+  const light = document.documentElement.dataset.theme === 'light';
+  const sliceA = light ? '#e7defc' : '#1c1440', sliceB = light ? '#d3c2f7' : '#2a2058';
+  const ink = light ? '#3b2a6d' : '#eaf2ff';
   ctx.clearRect(0, 0, 340, 340);
   for (let i = 0; i < n; i++) {
     ctx.beginPath(); ctx.moveTo(170, 170);
     ctx.arc(170, 170, 160, (i / n) * Math.PI * 2, ((i + 1) / n) * Math.PI * 2);
-    ctx.fillStyle = i === highlight ? '#a78bfa' : (i % 2 ? '#1c1440' : '#2a2058');
+    ctx.fillStyle = i === highlight ? '#a78bfa' : (i % 2 ? sliceA : sliceB);
     ctx.fill(); ctx.strokeStyle = 'rgba(167,139,250,.4)'; ctx.stroke();
     ctx.save(); ctx.translate(170, 170); ctx.rotate((i + .5) / n * Math.PI * 2);
-    ctx.fillStyle = '#eaf2ff'; ctx.font = '11px Inter'; ctx.textAlign = 'right';
+    ctx.fillStyle = ink; ctx.font = '11px Inter'; ctx.textAlign = 'right';
     ctx.fillText((wheelNames[i] || '—').slice(0, 16), 150, 4); ctx.restore();
   }
   ctx.beginPath(); ctx.arc(170, 170, 26, 0, 7); ctx.fillStyle = '#a78bfa'; ctx.fill();

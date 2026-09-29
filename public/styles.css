@@ -153,6 +153,20 @@ tbody tr:hover{background:rgba(167,139,250,.06)}
 @keyframes spinGlow{50%{box-shadow:0 0 30px rgba(167,139,250,.65)}}
 /* section headings */
 .card h3,.modal-card h3{margin-top:0}
+/* ===== LIGHT THEME POLISH (default) ===== */
+[data-theme="light"] body::before,[data-theme="light"] body::after{opacity:.5}
+[data-theme="light"] .bg-grid{opacity:.18}
+[data-theme="light"] .glass{background:rgba(255,255,255,.9);box-shadow:0 12px 32px rgba(109,40,217,.1)}
+[data-theme="light"] .login-card{box-shadow:0 0 0 1px var(--line),0 18px 55px rgba(109,40,217,.16)}
+[data-theme="light"] .progress{background:rgba(13,23,48,.1)}
+[data-theme="light"] .topbar h2{background:linear-gradient(90deg,#0d1730 20%,#6d28d9);-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme="light"] .cards b{background:linear-gradient(135deg,#6d28d9,#b45309);-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme="light"] #spinResult{background:linear-gradient(90deg,#6d28d9,#b45309);-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme="light"] table thead th{background:rgba(109,40,217,.07)}
+[data-theme="light"] tbody tr:hover{background:rgba(109,40,217,.06)}
+[data-theme="light"] .sidebar nav button.active,[data-theme="light"] .sidebar nav button:hover{background:rgba(109,40,217,.08)}
+[data-theme="light"] .modal{background:rgba(30,20,60,.45)}
+[data-theme="light"] .demo code{background:#ece5fb}
 #spinResult{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
 @media(max-width:900px){
   #appView{grid-template-columns:1fr}
