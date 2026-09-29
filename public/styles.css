@@ -1,9 +1,11 @@
 :root{
+  color-scheme: dark;
   --bg:#070b16; --bg2:#0b1226; --card:rgba(17,26,48,.78); --line:rgba(0,229,255,.16);
   --txt:#eaf2ff; --muted:#8fa0c2; --acc:#00e5ff; --acc2:#7c5cff; --ok:#22e58a; --warn:#ffb020; --bad:#ff5d6c;
   --radius:16px;
 }
 [data-theme="light"]{
+  color-scheme: light;
   --bg:#eef2fb; --bg2:#ffffff; --card:rgba(255,255,255,.92); --line:rgba(30,80,200,.14);
   --txt:#0d1730; --muted:#5a6b8c; --acc:#0057ff; --acc2:#7c5cff;
 }
@@ -22,6 +24,8 @@ h1,h2,h3,.brand b{font-family:Orbitron,Inter,sans-serif;letter-spacing:.3px}
 .btn.danger{border-color:var(--bad);color:var(--bad)}
 .btn.sm{padding:6px 10px;font-size:12px}
 input,select,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--txt);margin:6px 0}
+select option{background:#101a36;color:#eaf2ff;padding:8px}
+[data-theme="light"] select option{background:#ffffff;color:#0d1730}
 [data-theme="light"] input,[data-theme="light"] select,[data-theme="light"] textarea{background:#fff}
 label{font-size:13px;color:var(--muted);display:block;margin:8px 0}
 /* login */
