@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <path id="circ" d="M250,48 a202,202 0 1,1 -0.3,0" fill="none"/>
+  </defs>
+  <text font-family="Arial,Helvetica,sans-serif" font-size="32" font-weight="800" letter-spacing="4" fill="#111">
+    <textPath href="#circ">APOSTOLIC YOUTH DISCIPLES OF JESUS CHRIST - ACJCIPHIL - </textPath>
+  </text>
+  <g fill="none" stroke="#111" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="105,330 160,195 215,330"/>
+    <line x1="125" y1="282" x2="195" y2="282" stroke-width="10"/>
+    <line x1="237" y1="195" x2="267" y2="248"/>
+    <line x1="297" y1="195" x2="267" y2="248"/>
+    <line x1="267" y1="248" x2="267" y2="330"/>
+    <path d="M325,195 V330 H363 A67,67 0 0 1 363,195 Z"/>
+  </g>
+  <g stroke="#c9a35c" stroke-width="12" stroke-linecap="round">
+    <line x1="360" y1="228" x2="360" y2="292"/>
+    <line x1="338" y1="252" x2="382" y2="252"/>
+  </g>
+</svg>
