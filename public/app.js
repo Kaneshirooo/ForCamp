@@ -111,8 +111,10 @@ async function loadDashboard() {
     ['✅ Clean registered*', s.clean_registered], ['🏆 Winners', s.winners], ['🤝 Reps', s.representatives]
   ].map(([k, v]) => `<div class="card glass"><span class="muted">${k}</span><b>${v}</b></div>`).join('')
     + `<div class="card glass"><span class="muted">*excl. roulette winners</span><b style="font-size:14px">Boy ${s.byGender.boy} · Girl ${s.byGender.girl}</b></div>`;
-  $('#byChurch').innerHTML = Object.entries(s.byChurch).map(([k, v]) => `<div class="row" style="justify-content:space-between"><span>${k}</span><b>${v}</b></div>`).join('') || '<span class="muted">No data</span>';
-  $('#byStatus').innerHTML = Object.entries(s.byStatus).map(([k, v]) => `<div class="row" style="justify-content:space-between"><span class="badge b-${k}">${k}</span><b>${v}</b></div>`).join('') || '<span class="muted">No designations yet</span>';
+  const maxChurch = Math.max(1, ...Object.values(s.byChurch));
+  const maxStatus = Math.max(1, ...Object.values(s.byStatus));
+  $('#byChurch').innerHTML = Object.entries(s.byChurch).map(([k, v]) => `<div class="dash-bar"><div class="row" style="justify-content:space-between"><span>${k}</span><b>${v}</b></div><div class="progress"><i style="width:${Math.round(v / maxChurch * 100)}%"></i></div></div>`).join('') || '<span class="muted">No data</span>';
+  $('#byStatus').innerHTML = Object.entries(s.byStatus).map(([k, v]) => `<div class="dash-bar"><div class="row" style="justify-content:space-between"><span class="badge b-${k}">${k}</span><b>${v}</b></div><div class="progress"><i style="width:${Math.round(v / maxStatus * 100)}%"></i></div></div>`).join('') || '<span class="muted">No designations yet</span>';
 }
 
 // ---------- campers ----------
