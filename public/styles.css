@@ -66,6 +66,12 @@ th{color:var(--muted);font-size:12px;text-transform:uppercase}
 .modal-card{max-width:520px;width:100%;padding:20px;max-height:90vh;overflow:auto}
 .bottomnav{display:none}
 #wheel{max-width:100%;border-radius:50%;border:2px solid var(--acc);box-shadow:0 0 30px rgba(0,229,255,.3)}
+#wheelManage{text-align:left;border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+#wheelAddRow{margin:8px 0}
+#wheelAddRow input{flex:2;min-width:130px;margin:0}
+#wheelAddRow select{flex:1;min-width:80px;margin:0}
+#wheelEntries{max-height:220px;overflow:auto}
+#wheelExcluded{margin-top:8px}
 .roulette-card{text-align:center}
 @media(max-width:900px){
   #appView{grid-template-columns:1fr}

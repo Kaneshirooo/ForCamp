@@ -277,6 +277,42 @@ window.delRep = async (id) => { if (confirm('Delete representative?')) { await a
 
 // ---------- roulette ----------
 let wheelNames = [];
+let wheelEntries = [];
+const getExcluded = () => { try { return JSON.parse(localStorage.getItem('camp_wheel_excluded') || '[]'); } catch { return []; } };
+const setExcluded = (arr) => localStorage.setItem('camp_wheel_excluded', JSON.stringify(arr));
+function refreshWheel() {
+  const excl = new Set(getExcluded());
+  wheelEntries = ELIGIBLE.filter(c => !excl.has(c.id));
+  wheelNames = wheelEntries.map(c => c.first_name + ' ' + c.last_name);
+  $('#eligibleCount').textContent = wheelEntries.length;
+  drawWheel();
+  renderWheelEntries();
+}
+function renderWheelEntries() {
+  const excl = new Set(getExcluded());
+  const excluded = ELIGIBLE.filter(c => excl.has(c.id));
+  $('#wheelAddRow').style.display = can('admin', 'coordinator') ? '' : 'none';
+  $('#wheelEntries').innerHTML = wheelEntries.map(c =>
+    `<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:6px 0"><span>${c.first_name} ${c.last_name} <small class="muted">${c.church || ''}</small></span><button class="btn sm danger" onclick="excludeFromWheel('${c.id}')">Remove</button></div>`).join('')
+    || '<p class="muted">Wheel is empty — add people above.</p>';
+  $('#wheelExcluded').innerHTML = excluded.length
+    ? 'Removed: ' + excluded.map(c => `<button class="btn sm ghost" style="margin:2px" onclick="restoreToWheel('${c.id}')">${c.first_name} ${c.last_name} ↩</button>`).join(' ')
+    : '';
+}
+window.excludeFromWheel = (id) => { const e = getExcluded(); if (!e.includes(id)) e.push(id); setExcluded(e); refreshWheel(); };
+window.restoreToWheel = (id) => { setExcluded(getExcluded().filter(x => x !== id)); refreshWheel(); };
+$('#btnWheelAdd').onclick = async () => {
+  const raw = ($('#wheelName').value || '').trim();
+  if (!raw) return alert('Type a name first.');
+  const parts = raw.split(/\s+/);
+  const first_name = parts.shift();
+  const last_name = parts.join(' ') || '—';
+  try {
+    await api('/api/campers', { method: 'POST', body: JSON.stringify({ first_name, last_name, age: 0, gender: $('#wheelGender').value, church: '', contact: '', guardian: '', medical: '' }) });
+    $('#wheelName').value = '';
+    await loadRoulette();
+  } catch (e) { alert(e.message); }
+};
 function drawWheel(highlight = -1) {
   const cv = $('#wheel'), ctx = cv.getContext('2d'), n = Math.max(wheelNames.length, 1);
   ctx.clearRect(0, 0, 340, 340);
@@ -295,21 +331,19 @@ function drawWheel(highlight = -1) {
 async function loadRoulette() {
   ELIGIBLE = await api('/api/roulette/eligible');
   WINNERS = await api('/api/roulette/winners');
-  wheelNames = ELIGIBLE.map(c => c.first_name + ' ' + c.last_name);
-  $('#eligibleCount').textContent = ELIGIBLE.length;
-  drawWheel();
+  refreshWheel();
   $('#winnerList').innerHTML = WINNERS.map(w => `<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0">
     <span>🏆 <b>${w.camper ? w.camper.first_name + ' ' + w.camper.last_name : w.camper_id}</b> <small class="muted">${w.prize || ''}</small></span>
     ${can('admin', 'coordinator') ? `<button class="btn sm danger" onclick="delWinner('${w.id}')">Remove</button>` : ''}</div>`).join('')
     || '<p class="muted">No winners yet.</p>';
 }
 $('#btnSpin').onclick = async () => {
-  if (!ELIGIBLE.length) return alert('No eligible campers left.');
+  if (!wheelEntries.length) return alert('Wheel is empty. Add people first.');
   let ticks = 20 + Math.floor(Math.random() * 15), i = 0;
   const timer = setInterval(() => { drawWheel(i % wheelNames.length); i++; if (--ticks <= 0) {
     clearInterval(timer);
-    const idx = Math.floor(Math.random() * ELIGIBLE.length);
-    const pick = ELIGIBLE[idx];
+    const idx = Math.floor(Math.random() * wheelEntries.length);
+    const pick = wheelEntries[idx];
     $('#spinResult').textContent = '🎉 ' + pick.first_name + ' ' + pick.last_name;
     api('/api/roulette/draw', { method: 'POST', body: JSON.stringify({ camper_id: pick.id, prize: $('#prizeInput').value }) })
       .then(() => loadRoulette()).catch(e => alert(e.message));

@@ -101,14 +101,24 @@
     <section id="page-roulette" class="page hidden">
       <div class="grid2">
         <div class="card glass roulette-card">
-          <h3>🎡 Camp Roulette <small class="muted">(crude draw — winners excluded from reports)</small></h3>
+          <h3>🎡 Camp Roulette</h3>
           <canvas id="wheel" width="340" height="340"></canvas>
           <div class="row">
             <input id="prizeInput" placeholder="Prize (e.g. Bible, Shirt, Medal)">
             <button id="btnSpin" class="btn primary">SPIN</button>
           </div>
           <h2 id="spinResult"></h2>
-          <p class="muted">Eligible: <b id="eligibleCount">0</b> campers</p>
+          <p class="muted">On wheel: <b id="eligibleCount">0</b> campers</p>
+          <div id="wheelManage">
+            <b>Wheel entries</b>
+            <div class="row" id="wheelAddRow">
+              <input id="wheelName" placeholder="Add person (e.g. Juan Cruz)">
+              <select id="wheelGender"><option value="boy">Boy</option><option value="girl">Girl</option></select>
+              <button id="btnWheelAdd" class="btn sm primary">+ Add</button>
+            </div>
+            <div id="wheelEntries"></div>
+            <div id="wheelExcluded" class="muted"></div>
+          </div>
         </div>
         <div class="card glass"><h3>🏆 Winners</h3><div id="winnerList"></div></div>
       </div>
