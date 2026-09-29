@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampReg — Registration & Room Assignation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<!-- LOGIN -->
+<section id="loginView" class="login-wrap">
+  <div class="login-card glass">
+    <div class="brand"><span class="logo">◈</span><div><h1>CampReg</h1><p>Registration & Room Assignation</p></div></div>
+    <h2>Sign in</h2>
+    <p class="muted">Use your assigned account. Works on laptop & phone.</p>
+    <label>Username<input id="liUser" autocomplete="username" placeholder="admin"></label>
+    <label>Password<input id="liPass" type="password" autocomplete="current-password" placeholder="••••••••"></label>
+    <button id="btnLogin" class="btn primary">Login →</button>
+    <p id="loginErr" class="err"></p>
+    <div class="demo glass-soft">
+      <b>Demo accounts</b>
+      <code>admin / admin123</code><code>coordinator / coord123</code>
+      <code>president / pres123</code><code>viewer / view123</code>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="appView" class="hidden">
+  <aside class="sidebar glass">
+    <div class="brand sm"><span class="logo">◈</span><div><b>CampReg</b><small id="roleBadge">—</small></div></div>
+    <nav id="nav">
+      <button data-page="dashboard" class="active">▦ Dashboard</button>
+      <button data-page="campers">🧍 Campers</button>
+      <button data-page="rooms">🏠 Rooms / Layout</button>
+      <button data-page="designations">🛏️ Designations</button>
+      <button data-page="reps">🤝 Representatives</button>
+      <button data-page="roulette">🎡 Roulette</button>
+      <button data-page="reports">📊 Reports</button>
+      <button data-page="users" id="navUsers">👤 Users / Roles</button>
+    </nav>
+    <div class="side-foot">
+      <button id="btnTheme" class="btn ghost">🌙 Dark / Light</button>
+      <button id="btnLogout" class="btn ghost">⎋ Logout</button>
+      <small id="meLine"></small>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar glass">
+      <h2 id="pageTitle">Dashboard</h2>
+      <div class="top-actions"><span id="dbBadge" class="pill"></span><span id="clock" class="pill"></span></div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section id="page-dashboard" class="page">
+      <div class="cards" id="statCards"></div>
+      <div class="grid2">
+        <div class="card glass"><h3>By Church</h3><div id="byChurch"></div></div>
+        <div class="card glass"><h3>Designation Status</h3><div id="byStatus"></div></div>
+      </div>
+    </section>
+
+    <!-- CAMPERS -->
+    <section id="page-campers" class="page hidden">
+      <div class="toolbar">
+        <input id="camperSearch" placeholder="🔍 Search name / church…">
+        <select id="camperGender"><option value="">All genders</option><option value="boy">Boys</option><option value="girl">Girls</option></select>
+        <button id="btnAddCamper" class="btn primary">+ Register camper</button>
+      </div>
+      <div class="table-wrap glass"><table><thead><tr>
+        <th>Name</th><th>Age</th><th>Gender</th><th>Church</th><th>Contact</th><th>Guardian</th><th>Status</th><th></th>
+      </tr></thead><tbody id="camperRows"></tbody></table></div>
+    </section>
+
+    <!-- ROOMS -->
+    <section id="page-rooms" class="page hidden">
+      <div class="toolbar"><button id="btnAddRoom" class="btn primary">+ Add room / layout</button></div>
+      <div class="room-grid" id="roomGrid"></div>
+    </section>
+
+    <!-- DESIGNATIONS -->
+    <section id="page-designations" class="page hidden">
+      <div class="toolbar"><button id="btnAddDesig" class="btn primary">+ New designation</button>
+        <span class="muted">Arrival photo = pagkarating · Departure photo = pagkaalis</span></div>
+      <div class="room-grid" id="desigGrid"></div>
+    </section>
+
+    <!-- REPS -->
+    <section id="page-reps" class="page hidden">
+      <div class="toolbar"><button id="btnAddRep" class="btn primary">+ Add representative</button>
+        <span class="muted">Each church: 1 boy + 1 girl leader</span></div>
+      <div class="table-wrap glass"><table><thead><tr><th>Church</th><th>Name</th><th>Role</th><th>Contact</th><th></th></tr></thead>
+      <tbody id="repRows"></tbody></table></div>
+    </section>
+
+    <!-- ROULETTE -->
+    <section id="page-roulette" class="page hidden">
+      <div class="grid2">
+        <div class="card glass roulette-card">
+          <h3>🎡 Camp Roulette <small class="muted">(crude draw — winners excluded from reports)</small></h3>
+          <canvas id="wheel" width="340" height="340"></canvas>
+          <div class="row">
+            <input id="prizeInput" placeholder="Prize (e.g. Bible, Shirt, Medal)">
+            <button id="btnSpin" class="btn primary">SPIN</button>
+          </div>
+          <h2 id="spinResult"></h2>
+          <p class="muted">Eligible: <b id="eligibleCount">0</b> campers</p>
+        </div>
+        <div class="card glass"><h3>🏆 Winners</h3><div id="winnerList"></div></div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="page-reports" class="page hidden">
+      <div class="toolbar">
+        <button id="btnCsv" class="btn primary">⬇ Download CSV (excl. winners)</button>
+        <button id="btnPrint" class="btn">🖨 Print report</button>
+      </div>
+      <div class="card glass"><h3>Registered campers <small class="muted">— roulette winners excluded</small></h3>
+        <div id="reportMeta" class="muted"></div>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Age</th><th>Gender</th><th>Church</th><th>Contact</th></tr></thead>
+        <tbody id="reportRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- USERS -->
+    <section id="page-users" class="page hidden">
+      <div class="toolbar"><button id="btnAddUser" class="btn primary">+ Add user / role</button></div>
+      <div class="table-wrap glass"><table><thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Church</th><th></th></tr></thead>
+      <tbody id="userRows"></tbody></table></div>
+    </section>
+  </main>
+
+  <nav class="bottomnav glass">
+    <button data-page="dashboard" class="active">▦</button>
+    <button data-page="campers">🧍</button>
+    <button data-page="rooms">🏠</button>
+    <button data-page="designations">🛏️</button>
+    <button data-page="roulette">🎡</button>
+    <button data-page="reports">📊</button>
+  </nav>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal hidden"><div class="modal-card glass"><h3 id="mTitle"></h3><div id="mBody"></div>
+<div class="row end"><button id="mCancel" class="btn ghost">Cancel</button><button id="mSave" class="btn primary">Save</button></div></div></div>
+<input type="file" id="hiddenFile" accept="image/*" class="hidden">
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: camp-registration-system
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.12.2
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEMO_SEED
+        value: true
+      # Optional persistence: add a Render Postgres and set this:
+      # - key: DATABASE_URL
+      #   fromDatabase:
+      #     name: camp-db
+      #     property: connectionString
+# databases:
+#   - name: camp-db
+#     plan: free

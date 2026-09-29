@@ -1,0 +1,75 @@
+:root{
+  --bg:#070b16; --bg2:#0b1226; --card:rgba(17,26,48,.78); --line:rgba(0,229,255,.16);
+  --txt:#eaf2ff; --muted:#8fa0c2; --acc:#00e5ff; --acc2:#7c5cff; --ok:#22e58a; --warn:#ffb020; --bad:#ff5d6c;
+  --radius:16px;
+}
+[data-theme="light"]{
+  --bg:#eef2fb; --bg2:#ffffff; --card:rgba(255,255,255,.92); --line:rgba(30,80,200,.14);
+  --txt:#0d1730; --muted:#5a6b8c; --acc:#0057ff; --acc2:#7c5cff;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(1200px 600px at 80% -10%,rgba(0,229,255,.14),transparent),radial-gradient(900px 500px at 10% 110%,rgba(124,92,255,.16),transparent),var(--bg);color:var(--txt);min-height:100vh}
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(70% 60% at 50% 20%,#000,transparent);opacity:.35;pointer-events:none}
+h1,h2,h3,.brand b{font-family:Orbitron,Inter,sans-serif;letter-spacing:.3px}
+.hidden{display:none!important}
+.glass{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.glass-soft{border:1px solid var(--line);border-radius:12px;padding:10px;background:rgba(0,229,255,.05)}
+.muted{color:var(--muted)} .err{color:var(--bad)} .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .row.end{justify-content:flex-end;margin-top:14px}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--txt);padding:10px 16px;border-radius:12px;cursor:pointer;font-weight:600}
+.btn.primary{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#04121a;border:none;box-shadow:0 6px 22px rgba(0,229,255,.35)}
+[data-theme="light"] .btn.primary{color:#fff}
+.btn.ghost{background:transparent}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+.btn.sm{padding:6px 10px;font-size:12px}
+input,select,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--txt);margin:6px 0}
+[data-theme="light"] input,[data-theme="light"] select,[data-theme="light"] textarea{background:#fff}
+label{font-size:13px;color:var(--muted);display:block;margin:8px 0}
+/* login */
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:20px;position:relative;z-index:1}
+.login-card{max-width:400px;width:100%;padding:28px}
+.brand{display:flex;gap:12px;align-items:center}.logo{font-size:30px;color:var(--acc);text-shadow:0 0 18px var(--acc)}
+.brand h1{margin:0;font-size:22px}.brand p{margin:0;color:var(--muted);font-size:12px}
+.demo{margin-top:14px;display:grid;gap:4px;font-size:12px}.demo code{background:rgba(0,0,0,.3);padding:2px 8px;border-radius:8px;width:fit-content}
+[data-theme="light"] .demo code{background:#eef}
+/* layout */
+#appView{display:grid;grid-template-columns:250px 1fr;min-height:100vh;position:relative;z-index:1}
+.sidebar{margin:14px;padding:16px;display:flex;flex-direction:column;gap:12px;position:sticky;top:14px;height:calc(100vh - 28px)}
+.sidebar nav{display:grid;gap:6px}.sidebar nav button{text-align:left;background:transparent;border:1px solid transparent;color:var(--txt);padding:11px 12px;border-radius:12px;cursor:pointer;font-weight:600}
+.sidebar nav button.active,.sidebar nav button:hover{border-color:var(--line);background:rgba(0,229,255,.08)}
+.side-foot{margin-top:auto;display:grid;gap:8px}
+main{padding:14px;max-width:1200px;width:100%}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;margin-bottom:14px}
+.pill{border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:12px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.cards .card{padding:16px}.cards b{font-size:26px;display:block}
+.card{padding:16px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.toolbar input,.toolbar select{width:auto;min-width:200px;margin:0}
+.table-wrap{overflow:auto;padding:6px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{color:var(--muted);font-size:12px;text-transform:uppercase}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.room-card{padding:14px;display:grid;gap:8px}
+.room-card img{width:100%;height:150px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+.badge{font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid var(--line)}
+.b-boy{background:rgba(0,150,255,.15)} .b-girl{background:rgba(255,93,180,.15)} .b-mixed{background:rgba(124,92,255,.18)}
+.b-pending{color:var(--warn)} .b-approved{color:var(--ok)} .b-rejected{color:var(--bad)}
+.progress{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:16px;z-index:50}
+.modal-card{max-width:520px;width:100%;padding:20px;max-height:90vh;overflow:auto}
+.bottomnav{display:none}
+#wheel{max-width:100%;border-radius:50%;border:2px solid var(--acc);box-shadow:0 0 30px rgba(0,229,255,.3)}
+.roulette-card{text-align:center}
+@media(max-width:900px){
+  #appView{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .grid2{grid-template-columns:1fr}
+  main{padding:12px 12px 90px}
+  .bottomnav{display:flex;position:fixed;bottom:10px;left:10px;right:10px;justify-content:space-around;padding:10px;z-index:40}
+  .bottomnav button{background:none;border:none;font-size:22px;opacity:.6}
+  .bottomnav button.active{opacity:1;filter:drop-shadow(0 0 6px var(--acc))}
+}
+@media print{ .sidebar,.toolbar,.bottomnav,.top-actions{display:none!important} body{background:#fff;color:#000} .glass{box-shadow:none} }
