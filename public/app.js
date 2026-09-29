@@ -262,7 +262,7 @@ async function loadReps() {
   $('#repRows').innerHTML = REPS.map(r => `<tr><td>${r.church}</td><td><b>${r.name}</b></td>
     <td><span class="badge b-${r.gender}">${r.gender === 'boy' ? 'Boy rep' : 'Girl rep'}</span></td><td>${r.contact || '—'}</td>
     <td><button class="btn sm danger" onclick="delRep('${r.id}')">Del</button></td></tr>`).join('')
-    || `<tr><td colspan="5" class="muted">No representatives yet — add 1 boy + 1 girl per church.</td></tr>`;
+    || `<tr><td colspan="5" class="muted">No representatives yet.</td></tr>`;
 }
 $('#btnAddRep').onclick = () => openModal('Add representative', `
   ${field('p_ch', 'Church', ME.role === 'president' ? ME.church : '')}
@@ -354,7 +354,6 @@ window.delWinner = async (id) => { if (confirm('Remove winner (they become eligi
 // ---------- reports ----------
 async function loadReport() {
   const r = await api('/api/reports/registered');
-  $('#reportMeta').textContent = `Registered: ${r.total_registered} · Winners: ${r.total_winners} · Clean list (report): ${r.total_clean}`;
   $('#reportRows').innerHTML = r.campers.map(c => `<tr><td><b>${c.first_name} ${c.last_name}</b></td><td>${c.age}</td>
     <td>${c.gender}</td><td>${c.church}</td><td>${c.contact || '—'}</td></tr>`).join('')
     || '<tr><td colspan="5" class="muted">No campers.</td></tr>';
