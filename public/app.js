@@ -229,9 +229,11 @@ async function loadDesignations() {
         <div style="flex:1;display:grid;gap:4px">${d.departure_photo ? `<img src="${d.departure_photo}">` : '<small class="muted">No departure photo</small>'}<small class="muted">Departure</small></div>
       </div>
       <small class="muted">${d.notes || ''} ${d.approved_by ? '· by ' + d.approved_by : ''}</small>
+      ${d.signature ? `<div class="sig-block"><img src="${d.signature}" alt="Pirma"><small class="muted">Pirma · ${d.signed_by || 'signed'}</small></div>` : ''}
       <div class="row">
         ${can('admin', 'coordinator', 'president') && d.status === 'pending' ? `<button class="btn sm primary" onclick="approveDesig('${d.id}','approved')">Approve</button><button class="btn sm danger" onclick="approveDesig('${d.id}','rejected')">Reject</button>` : ''}
         ${can('admin', 'coordinator', 'president') ? `<button class="btn sm" onclick="photoDesig('${d.id}','arrival_photo')">📷 Arrival</button><button class="btn sm" onclick="photoDesig('${d.id}','departure_photo')">📷 Departure</button>` : ''}
+        ${can('admin', 'coordinator', 'president') ? `<button class="btn sm" onclick="signDesig('${d.id}')">${d.signature ? '✍ Re-sign' : '✍ Sign'}</button>` : ''}
         ${can('admin', 'coordinator') ? `<button class="btn sm danger" onclick="delDesig('${d.id}')">Del</button>` : ''}
       </div>
     </div>`).join('') || '<p class="muted">No designations yet.</p>';
@@ -257,6 +259,36 @@ window.photoDesig = (id, kind) => {
     loadDesignations();
   };
 };
+// Pirma — hand signature (president approval sign-off)
+window.signDesig = (id) => {
+  window._sigDrawn = false;
+  openModal('✍ Pirma — sign designation', `
+    <p class="muted">Sign below with your finger or mouse, then Save.</p>
+    <canvas id="sigPad" width="460" height="170" style="width:100%;border:1px solid var(--line);border-radius:12px;touch-action:none;cursor:crosshair"></canvas>
+    <div class="row" style="margin-top:8px"><button class="btn sm ghost" onclick="clearSig()">Clear</button></div>`,
+    async () => {
+      if (!window._sigDrawn) return alert('Please sign first.');
+      const url = $('#sigPad').toDataURL('image/png');
+      await api('/api/designations/' + id, { method: 'PUT', body: JSON.stringify({ signature: url, signed_by: ME.name }) });
+      $('#modal').classList.add('hidden'); loadDesignations();
+    });
+  initSigPad();
+};
+window.clearSig = () => { window._sigDrawn = false; initSigPad(); };
+function initSigPad() {
+  const cv = $('#sigPad'); if (!cv) return;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  const light = document.documentElement.dataset.theme === 'light';
+  ctx.strokeStyle = light ? '#4c1d95' : '#fbbf24';
+  ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  let drawing = false, last = null;
+  const pos = (e) => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height }; };
+  cv.onpointerdown = (e) => { drawing = true; last = pos(e); try { cv.setPointerCapture(e.pointerId); } catch {} };
+  cv.onpointermove = (e) => { if (!drawing) return; const p = pos(e); ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p; window._sigDrawn = true; };
+  cv.onpointerup = () => drawing = false;
+  cv.onpointercancel = () => drawing = false;
+}
 
 // ---------- reps ----------
 async function loadReps() {

@@ -58,6 +58,8 @@ async function init() {
       arrival_date TEXT DEFAULT '', departure_date TEXT DEFAULT '',
       approved_by TEXT DEFAULT '', notes TEXT DEFAULT '', created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
+    await pgPool.query(`ALTER TABLE designations ADD COLUMN IF NOT EXISTS signature TEXT DEFAULT ''`);
+    await pgPool.query(`ALTER TABLE designations ADD COLUMN IF NOT EXISTS signed_by TEXT DEFAULT ''`);
     await pgPool.query(`CREATE TABLE IF NOT EXISTS representatives(
       id TEXT PRIMARY KEY, church TEXT NOT NULL, name TEXT NOT NULL,
       gender TEXT DEFAULT 'boy', contact TEXT DEFAULT '', created_at TIMESTAMPTZ DEFAULT NOW()

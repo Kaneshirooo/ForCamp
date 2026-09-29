@@ -188,13 +188,13 @@ app.get('/api/designations', auth, async (req, res) => {
 app.post('/api/designations', auth, allow('admin', 'coordinator'), async (req, res) => {
   const { camper_id, room_id, status = 'pending', notes = '' } = req.body || {};
   if (!camper_id || !room_id) return res.status(400).json({ error: 'camper_id and room_id required' });
-  const row = await db.insert('designations', { id: uid(), camper_id, room_id, status, notes, arrival_photo: '', departure_photo: '', arrival_date: '', departure_date: '', approved_by: '' });
+  const row = await db.insert('designations', { id: uid(), camper_id, room_id, status, notes, arrival_photo: '', departure_photo: '', arrival_date: '', departure_date: '', approved_by: '', signature: '', signed_by: '' });
   await db.log(req.user.username, 'assign_room', `${camper_id} -> ${room_id}`);
   res.json(row);
 });
 app.put('/api/designations/:id', auth, allow('admin', 'coordinator', 'president'), async (req, res) => {
   const patch = {};
-  for (const k of ['status', 'notes', 'arrival_photo', 'departure_photo', 'arrival_date', 'departure_date', 'room_id', 'camper_id']) {
+  for (const k of ['status', 'notes', 'arrival_photo', 'departure_photo', 'arrival_date', 'departure_date', 'room_id', 'camper_id', 'signature', 'signed_by']) {
     if (req.body[k] !== undefined) patch[k] = req.body[k];
   }
   if (['approved', 'rejected'].includes(patch.status)) patch.approved_by = req.user.username;
