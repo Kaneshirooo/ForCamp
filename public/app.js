@@ -70,7 +70,6 @@ async function boot() {
   $('#btnAddRoom').style.display = can('admin', 'coordinator') ? '' : 'none';
   $('#btnAddDesig').style.display = can('admin', 'coordinator') ? '' : 'none';
   $('#btnSpin').disabled = !can('admin', 'coordinator');
-  const h = await api('/api/health'); $('#dbBadge').textContent = 'DB: ' + h.db;
   setInterval(() => $('#clock').textContent = new Date().toLocaleString(), 1000);
   go('dashboard');
 }
