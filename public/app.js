@@ -85,6 +85,25 @@ $('#mCancel').onclick = () => $('#modal').classList.add('hidden');
 $('#mSave').onclick = async () => { if (saveFn) await saveFn(); };
 const field = (id, label, val = '', type = 'text') => `<label>${label}<input id="${id}" type="${type}" value="${String(val ?? '').replace(/"/g, '&quot;')}"></label>`;
 
+// Room layout photo: pick from gallery instead of pasting a URL
+const roomImageField = (existing = '') => `
+  <label>Layout photo (choose from gallery)<input id="r_file" type="file" accept="image/*" onchange="previewRoomFile(this)"></label>
+  <input id="r_im" type="hidden" value="${String(existing || '').replace(/"/g, '&quot;')}">
+  <div id="r_prev">${existing ? `<img src="${existing}" style="width:100%;height:140px;object-fit:cover;border-radius:12px;border:1px solid var(--line)">` : '<small class="muted">No photo attached</small>'}</div>`;
+window.previewRoomFile = (inp) => {
+  const f = inp.files && inp.files[0];
+  if (f) $('#r_prev').innerHTML = `<img src="${URL.createObjectURL(f)}" style="width:100%;height:140px;object-fit:cover;border-radius:12px;border:1px solid var(--line)">`;
+};
+async function resolveRoomImage() {
+  const f = $('#r_file');
+  if (f && f.files && f.files[0]) {
+    $('#mSave').disabled = true; $('#mSave').textContent = 'Uploading…';
+    try { $('#r_im').value = await apiFile(f.files[0]); }
+    finally { $('#mSave').disabled = false; $('#mSave').textContent = 'Save'; }
+  }
+  return $('#r_im').value;
+}
+
 // ---------- dashboard ----------
 async function loadDashboard() {
   const s = await api('/api/reports/summary');
@@ -170,11 +189,12 @@ $('#btnAddRoom').onclick = () => openModal('Add room / layout', `
   <div class="row">${field('r_bd', 'Building / Layout')}${field('r_nm', 'Room name/number')}</div>
   <div class="row">${field('r_cp', 'Capacity', '10', 'number')}
   <label>Gender assignment<select id="r_g"><option value="mixed">mixed</option><option value="boy">boy</option><option value="girl">girl</option></select></label></div>
-  ${field('r_ds', 'Description')}${field('r_im', 'Layout image URL (optional)')}`,
+  ${field('r_ds', 'Description')}${roomImageField('')}`,
   async () => {
+    const layout_url = await resolveRoomImage();
     await api('/api/rooms', { method: 'POST', body: JSON.stringify({
       building: $('#r_bd').value, room_name: $('#r_nm').value, capacity: $('#r_cp').value,
-      gender: $('#r_g').value, description: $('#r_ds').value, layout_url: $('#r_im').value }) });
+      gender: $('#r_g').value, description: $('#r_ds').value, layout_url }) });
     $('#modal').classList.add('hidden'); loadRooms();
   });
 window.editRoom = (id) => {
@@ -182,11 +202,12 @@ window.editRoom = (id) => {
   openModal('Edit room', `${field('r_bd', 'Building', r.building)}${field('r_nm', 'Room name', r.room_name)}
     <div class="row">${field('r_cp', 'Capacity', r.capacity, 'number')}
     <label>Gender<select id="r_g"><option value="mixed" ${r.gender === 'mixed' ? 'selected' : ''}>mixed</option><option value="boy" ${r.gender === 'boy' ? 'selected' : ''}>boy</option><option value="girl" ${r.gender === 'girl' ? 'selected' : ''}>girl</option></select></label></div>
-    ${field('r_ds', 'Description', r.description)}${field('r_im', 'Layout image URL', r.layout_url)}`,
+    ${field('r_ds', 'Description', r.description)}${roomImageField(r.layout_url)}`,
     async () => {
+      const layout_url = await resolveRoomImage();
       await api('/api/rooms/' + id, { method: 'PUT', body: JSON.stringify({
         building: $('#r_bd').value, room_name: $('#r_nm').value, capacity: $('#r_cp').value,
-        gender: $('#r_g').value, description: $('#r_ds').value, layout_url: $('#r_im').value }) });
+        gender: $('#r_g').value, description: $('#r_ds').value, layout_url }) });
       $('#modal').classList.add('hidden'); loadRooms();
     });
 };
