@@ -57,6 +57,12 @@ $('#btnLogin').onclick = async () => {
     await boot();
   } catch (e) { $('#loginErr').textContent = e.message; }
 };
+$('#btnEye').onclick = () => {
+  const p = $('#liPass');
+  const show = p.type === 'password';
+  p.type = show ? 'text' : 'password';
+  $('#btnEye').textContent = show ? '🙈' : '👁';
+};
 $('#btnLogout').onclick = () => { localStorage.removeItem('camp_token'); location.reload(); };
 
 async function boot() {
@@ -108,10 +114,11 @@ async function resolveRoomImage() {
 async function loadDashboard() {
   const s = await api('/api/reports/summary');
   $('#statCards').innerHTML = [
-    ['🧍', 'Campers', s.campers], ['🏠', 'Rooms', s.rooms], ['🛏️', 'Designations', s.designations],
-    ['✅', 'Registered', s.clean_registered], ['🏆', 'Winners', s.winners], ['🤝', 'Reps', s.representatives]
-  ].map(([ic, k, v]) => `<div class="card glass stat"><div class="stat-ic">${ic}</div><div><span class="muted">${k}</span><b>${v}</b></div></div>`).join('')
-    + `<div class="card glass stat"><div class="stat-ic">⚥</div><div><span class="muted">By gender</span><b style="font-size:14px">Boy ${s.byGender.boy} · Girl ${s.byGender.girl}</b></div></div>`;
+    ['🧍', 'Campers', s.campers, 'campers'], ['🏠', 'Rooms', s.rooms, 'rooms'], ['🛏️', 'Designations', s.designations, 'designations'],
+    ['✅', 'Registered', s.clean_registered, 'reports'], ['🏆', 'Winners', s.winners, 'roulette'], ['🤝', 'Reps', s.representatives, 'reps']
+  ].map(([ic, k, v, pg]) => `<div class="card glass stat" data-go="${pg}" title="Go to ${k}"><div class="stat-ic">${ic}</div><div><span class="muted">${k}</span><b>${v}</b></div></div>`).join('')
+    + `<div class="card glass stat" data-go="campers" title="Go to Campers"><div class="stat-ic">⚥</div><div><span class="muted">By gender</span><b style="font-size:14px">Boy ${s.byGender.boy} · Girl ${s.byGender.girl}</b></div></div>`;
+  document.querySelectorAll('#statCards [data-go]').forEach(el => el.onclick = () => go(el.dataset.go));
   const maxChurch = Math.max(1, ...Object.values(s.byChurch));
   const maxStatus = Math.max(1, ...Object.values(s.byStatus));
   $('#byChurch').innerHTML = Object.entries(s.byChurch).map(([k, v]) => `<div class="dash-bar"><div class="row" style="justify-content:space-between"><span>${k}</span><b>${v}</b></div><div class="progress"><i style="width:${Math.round(v / maxChurch * 100)}%"></i></div></div>`).join('') || '<span class="muted">No data</span>';

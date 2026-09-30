@@ -28,6 +28,10 @@ select option{background:#101a36;color:#f7ecdc;padding:8px}
 [data-theme="light"] select option{background:#ffffff;color:#241309}
 [data-theme="light"] input,[data-theme="light"] select,[data-theme="light"] textarea{background:#fff}
 label{font-size:13px;color:var(--muted);display:block;margin:8px 0}
+.pass-wrap{position:relative;display:block}
+.pass-wrap input{padding-right:44px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;padding:6px;opacity:.65;color:var(--txt)}
+.eye:hover{opacity:1}
 /* login */
 .login-wrap{min-height:100vh;display:grid;place-items:center;padding:20px;position:relative;z-index:1}
 .login-card{max-width:780px;width:100%;padding:0;overflow:hidden;display:grid;grid-template-columns:1fr 1.1fr}
@@ -147,7 +151,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box
 .cards .card{position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s}
 .cards .card:hover{transform:translateY(-3px);box-shadow:0 0 22px rgba(242,169,59,.22),0 12px 40px rgba(0,0,0,.25)}
 .cards .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:.7}
-.stat{display:flex;gap:12px;align-items:center}
+.stat{display:flex;gap:12px;align-items:center;cursor:pointer}
 .stat>div:last-child{display:grid}
 .stat-ic{width:46px;height:46px;flex:none;border-radius:14px;display:grid;place-items:center;font-size:21px;background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 6px 18px rgba(0,0,0,.3)}
 .brand b,.brand h1{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
