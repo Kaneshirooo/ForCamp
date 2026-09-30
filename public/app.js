@@ -65,7 +65,6 @@ async function boot() {
   } catch { localStorage.removeItem('camp_token'); return; }
   $('#loginView').classList.add('hidden'); $('#appView').classList.remove('hidden');
   $('#roleBadge').textContent = (ME.role === 'viewer' ? 'representative' : ME.role) + (ME.church ? ' · ' + ME.church : '');
-  $('#meLine').textContent = ME.name + ' (@' + ME.username + ')';
   $('#navUsers').style.display = ME.role === 'admin' ? '' : 'none';
   if (ME.role === 'viewer') ['dashboard', 'campers', 'rooms', 'reps', 'roulette', 'reports'].forEach(p => document.querySelectorAll(`[data-page="${p}"]`).forEach(b => b.style.display = 'none'));
   $('#btnAddCamper').style.display = can('admin', 'coordinator') ? '' : 'none';
