@@ -67,6 +67,7 @@ async function boot() {
   $('#roleBadge').textContent = ME.role + (ME.church ? ' · ' + ME.church : '');
   $('#meLine').textContent = ME.name + ' (@' + ME.username + ')';
   $('#navUsers').style.display = ME.role === 'admin' ? '' : 'none';
+  if (ME.role === 'viewer') ['roulette', 'reports'].forEach(p => document.querySelectorAll(`[data-page="${p}"]`).forEach(b => b.style.display = 'none'));
   $('#btnAddCamper').style.display = can('admin', 'coordinator') ? '' : 'none';
   $('#btnAddRoom').style.display = can('admin', 'coordinator') ? '' : 'none';
   $('#btnAddDesig').style.display = can('admin', 'coordinator') ? '' : 'none';
