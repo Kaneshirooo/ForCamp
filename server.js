@@ -192,9 +192,13 @@ app.post('/api/designations', auth, allow('admin', 'coordinator'), async (req, r
   await db.log(req.user.username, 'assign_room', `${camper_id} -> ${room_id}`);
   res.json(row);
 });
-app.put('/api/designations/:id', auth, allow('admin', 'coordinator', 'president'), async (req, res) => {
+app.put('/api/designations/:id', auth, allow('admin', 'coordinator', 'president', 'viewer'), async (req, res) => {
   const patch = {};
-  for (const k of ['status', 'notes', 'arrival_photo', 'departure_photo', 'arrival_date', 'departure_date', 'room_id', 'camper_id', 'signature', 'signed_by']) {
+  // Representatives (viewer) may only attach arrival/departure room photos
+  const fields = req.user.role === 'viewer'
+    ? ['arrival_photo', 'departure_photo', 'arrival_date', 'departure_date']
+    : ['status', 'notes', 'arrival_photo', 'departure_photo', 'arrival_date', 'departure_date', 'room_id', 'camper_id', 'signature', 'signed_by'];
+  for (const k of fields) {
     if (req.body[k] !== undefined) patch[k] = req.body[k];
   }
   if (['approved', 'rejected'].includes(patch.status)) patch.approved_by = req.user.username;
@@ -209,7 +213,7 @@ app.delete('/api/designations/:id', auth, allow('admin', 'coordinator'), async (
 });
 
 // Photo upload (room sign: pagkarating / pagkaalis) + room layout images
-app.post('/api/upload', auth, allow('admin', 'coordinator', 'president'), upload.single('photo'), (req, res) => {
+app.post('/api/upload', auth, allow('admin', 'coordinator', 'president', 'viewer'), upload.single('photo'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file' });
   res.json({ url: '/uploads/' + req.file.filename });
 });

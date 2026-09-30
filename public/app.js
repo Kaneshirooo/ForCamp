@@ -64,16 +64,16 @@ async function boot() {
     ME = await api('/api/auth/me');
   } catch { localStorage.removeItem('camp_token'); return; }
   $('#loginView').classList.add('hidden'); $('#appView').classList.remove('hidden');
-  $('#roleBadge').textContent = ME.role + (ME.church ? ' · ' + ME.church : '');
+  $('#roleBadge').textContent = (ME.role === 'viewer' ? 'representative' : ME.role) + (ME.church ? ' · ' + ME.church : '');
   $('#meLine').textContent = ME.name + ' (@' + ME.username + ')';
   $('#navUsers').style.display = ME.role === 'admin' ? '' : 'none';
-  if (ME.role === 'viewer') ['roulette', 'reports'].forEach(p => document.querySelectorAll(`[data-page="${p}"]`).forEach(b => b.style.display = 'none'));
+  if (ME.role === 'viewer') ['dashboard', 'campers', 'rooms', 'reps', 'roulette', 'reports'].forEach(p => document.querySelectorAll(`[data-page="${p}"]`).forEach(b => b.style.display = 'none'));
   $('#btnAddCamper').style.display = can('admin', 'coordinator') ? '' : 'none';
   $('#btnAddRoom').style.display = can('admin', 'coordinator') ? '' : 'none';
   $('#btnAddDesig').style.display = can('admin', 'coordinator') ? '' : 'none';
   $('#btnSpin').disabled = !can('admin', 'coordinator');
   setInterval(() => $('#clock').textContent = new Date().toLocaleString(), 1000);
-  go('dashboard');
+  go(ME.role === 'viewer' ? 'designations' : 'dashboard');
 }
 
 // ---------- modal helper ----------
@@ -233,7 +233,7 @@ async function loadDesignations() {
       ${d.signature ? `<div class="sig-block"><img src="${d.signature}" alt="Pirma"><small class="muted">Pirma · ${d.signed_by || 'signed'}</small></div>` : ''}
       <div class="row">
         ${can('admin', 'coordinator', 'president') && d.status === 'pending' ? `<button class="btn sm primary" onclick="approveDesig('${d.id}','approved')">Approve</button><button class="btn sm danger" onclick="approveDesig('${d.id}','rejected')">Reject</button>` : ''}
-        ${can('admin', 'coordinator', 'president') ? `<button class="btn sm" onclick="photoDesig('${d.id}','arrival_photo')">📷 Arrival</button><button class="btn sm" onclick="photoDesig('${d.id}','departure_photo')">📷 Departure</button>` : ''}
+        ${can('admin', 'coordinator', 'president', 'viewer') ? `<button class="btn sm" onclick="photoDesig('${d.id}','arrival_photo')">📷 Arrival</button><button class="btn sm" onclick="photoDesig('${d.id}','departure_photo')">📷 Departure</button>` : ''}
         ${can('admin', 'coordinator', 'president') ? `<button class="btn sm" onclick="signDesig('${d.id}')">${d.signature ? '✍ Re-sign' : '✍ Sign'}</button>` : ''}
         ${can('admin', 'coordinator') ? `<button class="btn sm danger" onclick="delDesig('${d.id}')">Del</button>` : ''}
       </div>
